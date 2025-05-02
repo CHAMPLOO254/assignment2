@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .welcome-message {
+            font-size: 1.5rem;
+            color: #333;
+        }
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-btn:hover {
+            background-color: #c0392b;
+        }
+        .dashboard-content {
+            display: flex;
+            gap: 30px;
+        }
+        .user-info {
+            flex: 1;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .user-info h2 {
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+        .user-info p {
+            margin-bottom: 10px;
+        }
+        .actions {
+            flex: 2;
+        }
+        .action-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+        }
+        .action-card h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+        .submission-status {
+            margin-top: 20px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header">
+            <div class="welcome-message" id="welcomeMessage">
+                Welcome back, <span id="username"></span>!
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="user-info">
+                <h2>Your Profile</h2>
+                <p><strong>Username:</strong> <span id="displayUsername"></span></p>
+                <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                <p><strong>Member since:</strong> <span id="joinDate"></span></p>
+            </div>
+
+            <div class="actions">
+                <div class="action-card">
+                    <h3>Submit a New Form</h3>
+                    <p>Fill out and submit academic forms online.</p>
+                    <a href="submit-form.html" class="submit-btn">Go to Form Submission</a>
+                </div>
+
+                <div class="action-card">
+                    <h3>Recent Submissions</h3>
+                    <div class="submission-status" id="submissionStatus">
+                        <!-- Dynamically loaded submissions will appear here -->
+                        <p>Loading your submissions...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in (simplified version - in real app, verify session)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get username from session (in a real app, this would come from the server)
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('user') || localStorage.getItem('username') || 'Student';
+
+            // Display user info
+            document.getElementById('username').textContent = username;
+            document.getElementById('displayUsername').textContent = username;
+            
+            // Simulate fetching user data (replace with real API call)
+            setTimeout(() => {
+                document.getElementById('userEmail').textContent = username.toLowerCase() + '@example.com';
+                document.getElementById('joinDate').textContent = new Date().toLocaleDateString();
+                
+                // Load submissions (mock data)
+                const submissions = [
+                    { id: 1, type: 'Course Registration', status: 'Approved', date: '2023-10-15' },
+                    { id: 2, type: 'Grade Appeal', status: 'Pending', date: '2023-10-20' }
+                ];
+                
+                const statusContainer = document.getElementById('submissionStatus');
+                statusContainer.innerHTML = '';
+                
+                submissions.forEach(sub => {
+                    const item = document.createElement('div');
+                    item.className = 'status-item';
+                    item.innerHTML = `
+                        <span><strong>${sub.type}</strong></span>
+                        <span>${sub.status} • ${sub.date}</span>
+                    `;
+                    statusContainer.appendChild(item);
+                });
+            }, 500);
+        });
+
+        function logout() {
+            // In a real app, this would call a logout API
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>
